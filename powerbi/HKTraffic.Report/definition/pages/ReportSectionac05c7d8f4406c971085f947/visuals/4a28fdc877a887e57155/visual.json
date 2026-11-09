@@ -17,7 +17,17 @@
           "properties": {
             "paragraphs": [
               {
-                "textRuns": []
+                "textRuns": [
+                  {
+                    "value": "原始归档大约到了 72%–76%，TDS90018 的坏数据占 66%",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "16px",
+                      "fontWeight": "bold",
+                      "color": "#111827"
+                    }
+                  }
+                ]
               }
             ]
           }

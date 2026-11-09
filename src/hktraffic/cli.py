@@ -269,7 +269,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp.set_defaults(func=cmd_gold)
     add("serve", cmd_serve, "load gold + dimensions into PostgreSQL", date_arg=False)
     sp = add("export-bi", cmd_export_bi, "write the Power BI views to CSV files", date_arg=False)
-    sp.add_argument("--out", default="data/bi")
+    sp.add_argument("--out", default="powerbi/bi_data")
     sp = sub.add_parser("run-range", help="several days in one Spark session: unzip, silver, check, then gold")
     sp.add_argument("--start", type=_day, required=True)
     sp.add_argument("--end", type=_day, required=True)

@@ -18,8 +18,8 @@ run-day:            ## example: make run-day DATE=2026-10-28   (zips must be in 
 benchmark:          ## example: make benchmark DATE=2026-10-28
 	hktraffic benchmark --date $(DATE)
 
-export-bi:          ## CSV files for Power BI in data/bi/
-	hktraffic export-bi --out data/bi
+export-bi:          ## CSV files for the Power BI report in powerbi/bi_data/
+	hktraffic export-bi --out powerbi/bi_data
 
 test:
 	pytest -q

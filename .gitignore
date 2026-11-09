@@ -14,3 +14,7 @@ data/**
 powerbi/bi_data/*
 !powerbi/bi_data/.gitkeep
 **/.pbi/
+docs/
+powerbi/BUILD_GUIDE.md
+powerbi/INSIGHTS_TO_TEST.md
+powerbi/measures.dax

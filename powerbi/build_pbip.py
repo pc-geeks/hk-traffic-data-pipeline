@@ -976,7 +976,7 @@ def build_pages() -> list[tuple[str, str, dict]]:
     trust = page_id("trust")
     pages = []
 
-    rhythm_visuals = page_shell("rhythm", "工作日晚高峰比午间慢 6.4%（18:00 最慢，约 65 km/h）")
+    rhythm_visuals = page_shell("rhythm", "工作日晚高峰比午间慢 5.9%（18:00 最慢，65 km/h）")
     rhythm_visuals.append(
         (
             hid("rhythm speed card dyn"),
@@ -1063,7 +1063,7 @@ def build_pages() -> list[tuple[str, str, dict]]:
     ]
     pages.append((rhythm, "一天的节奏", {"visuals": rhythm_visuals}))
 
-    hot_visuals = page_shell("hot", "前 5 条走廊占了 31% 的拥堵读数，前 10 占 51%")
+    hot_visuals = page_shell("hot", "前 5 条走廊占了 32% 的拥堵读数，前 10 占 51%")
     hot_visuals += [
         (hid("hot district"), slicer(hid("hot district"), "bi_hotspot", "district", "地区", 12, 50, 250, 56, 4000, 2)),
         (
@@ -1134,7 +1134,7 @@ def build_pages() -> list[tuple[str, str, dict]]:
                         col_proj("bi_hotspot", "mean_speed_kmh", "速度 km/h"),
                     ]
                 },
-                container=chrome("热点明细", "按排名。779 个探测器，表格可滚动"),
+                container=chrome("热点明细", "按排名。783 个探测器，表格可滚动"),
                 sort=[sort_by("bi_hotspot", "rank", "Ascending")],
             ),
         ),
@@ -1212,7 +1212,7 @@ def build_pages() -> list[tuple[str, str, dict]]:
     pages.append((tidal, "潮汐车流", {"visuals": tidal_visuals, "filters": tidal_filter}))
 
     anomaly_filter = [categorical_filter("anomaly flag", "bi_anomaly", "is_anomaly", "1L")]
-    anomaly_visuals = page_shell("anomaly", "10月30日 18:00，Island Eastern Corridor 近 ICAC Headquarters 比平时慢 89%")
+    anomaly_visuals = page_shell("anomaly", "11月5日 16:00，Lion Rock Tunnel Road 近 Fung Shing Court 比平时慢 89%")
     anomaly_visuals += [
         (
             hid("anomaly count"),
@@ -1275,7 +1275,7 @@ def build_pages() -> list[tuple[str, str, dict]]:
     ]
     pages.append((anomalies, "异常事件", {"visuals": anomaly_visuals, "filters": anomaly_filter}))
 
-    trust_visuals = page_shell("trust", "原始归档每天大约只到 68%–74%，TDS90018 的坏数据占 68%")
+    trust_visuals = page_shell("trust", "原始归档大约到了 72%–76%，TDS90018 的坏数据占 66%")
     trust_kpis = [
         ("Raw File Completeness", "Raw File Completeness", "#1D4ED8"),
         ("Bad Row Share", "Bad Row Share", "#DC2626"),
@@ -1313,7 +1313,7 @@ def build_pages() -> list[tuple[str, str, dict]]:
                         )
                     ]
                 },
-                container=chrome("每小时覆盖率", "红是缺口。10月29日 17:00 和 10月30日 13:00 最差"),
+                container=chrome("每小时覆盖率", "红是缺口。11月3日 18:00 最低，约 61%"),
             ),
         ),
         (

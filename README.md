@@ -1,5 +1,7 @@
 # hk-traffic-pipeline
 
+Hong Kong measures the speed of its major roads all day and publishes the readings; this project turns that public record into a trustworthy view of where the city actually congests and which hours were unusually slow.
+
 A PySpark pipeline on **Hong Kong road-traffic open data** (Transport Department, via data.gov.hk): raw XML
 archives -> cleaned Parquet with explicit quality flags -> analytics tables -> PostgreSQL, orchestrated with Airflow.
 
@@ -43,16 +45,12 @@ flowchart LR
 | Gold | `detector_hour` (volume-weighted speed, occupancy, congested share, coverage), `hotspots`, `anomalies` |
 | Serving | The small gold tables and the dimensions in PostgreSQL, with example SQL |
 
-A step-by-step reading path (architecture, then one module at a time, then the functions) is in
-[docs/LEARNING_GUIDE.md](docs/LEARNING_GUIDE.md).
-
 ## What the real data looks like
 
 The specification and the real files disagree in several places, and the real files contain traps that would
-silently corrupt averages (invalid rows with plausible numbers, speeds of 237 km/h, rows with no vehicles but a
+silently corrupt averages (invalid rows with plausible numbers, speeds above 200 km/h, rows with no vehicles but a
 speed).
-Everything is documented with counts in [docs/data_findings.md](docs/data_findings.md) and asserted by tests
-against the real sample files in `tests/fixtures/real/`.
+The same cases are asserted by tests against the real sample files in `tests/fixtures/real/`.
 
 Quality flags on lane rows: `ok`, `invalid_flag`, `missing_value`, `out_of_range`, `no_vehicles`,
 `standstill_candidate`, `parse_error`. A corrupt or truncated XML file produces one `parse_error` row instead of
@@ -93,9 +91,9 @@ export HKT_DSN=postgresql://postgres:postgres@localhost:5432/hktraffic
 ```bash
 hktraffic scan                                        # lists days, dimension zips, anything unrecognised
 hktraffic dims                                        # newest detector zip found in data/landing
-hktraffic run-range --start 2026-10-26 --end 2026-10-30 --delete-raw
+hktraffic run-range --start 2026-11-02 --end 2026-11-06 --delete-raw
 hktraffic serve                                       # gold + dimensions + run metrics -> PostgreSQL
-hktraffic export-bi --out data/bi                     # CSV files for Power BI
+hktraffic export-bi --out powerbi/bi_data             # CSV files for the Power BI report
 ```
 
 `run-range` uses one Spark session for all days (unzip, silver, quality gate per day, then gold) and `--delete-raw` removes
@@ -125,13 +123,11 @@ The last step of the pipeline is a Power BI report built from the serving layer.
 are exported to CSV with one command:
 
 ```bash
-hktraffic export-bi --out data/bi        # or: make export-bi
+hktraffic export-bi --out powerbi/bi_data
 ```
 
-`data/bi` is the default folder inside this repo. Refreshing an existing report means passing the directory in its
-`DataPath` parameter as `--out`. For `powerbi/HKTraffic.pbip` that directory is
-`G:/MyGithub/self-learn-autumn/hk-traffic/hk-traffic-pipeline/hk-traffic-pipeline/powerbi/bi_data`
-(see [powerbi/BUILD_GUIDE.md](powerbi/BUILD_GUIDE.md)).
+`export-bi` writes to `powerbi/bi_data`, which is the directory `powerbi/HKTraffic.pbip` reads
+(`DataPath`). Refresh the report after exporting.
 
 | Page | Question |
 |---|---|
@@ -141,28 +137,45 @@ hktraffic export-bi --out data/bi        # or: make export-bi
 | 4. Anomalies | Which hours were far slower than usual for that detector, and do they match real events? |
 | 5. Data trust | How much of the data can be trusted? (archive gaps, bad-row share per detector) |
 
-How to build it: [powerbi/BUILD_GUIDE.md](powerbi/BUILD_GUIDE.md) (field-by-field, in Chinese). DAX measures:
-[powerbi/measures.dax](powerbi/measures.dax). Hypotheses still worth checking against the report:
-[powerbi/INSIGHTS_TO_TEST.md](powerbi/INSIGHTS_TO_TEST.md). The measures and theme were written without access to Power BI
-Desktop and have not been run there.
+The screenshots below are the report open in Power BI Desktop on five weekdays, 2–6 November 2026.
 
-<!-- Add screenshots here after building the report: ![Overview](docs/images/page1.png) -->
+![Weekday speed by hour, with a congestion heatmap](screenshots/Screenshot%202026-11-09%20085206.png)
+
+*The rhythm of a day. One weekday line: slowest at 08:00 and 18:00.*
+
+![Detector locations and the ten corridors with the highest average congestion](screenshots/Screenshot%202026-11-09%20085307.png)
+
+*Hotspots. Each point is a detector; the bars are the ten corridors with the highest average congested share.*
+
+![Tuen Mun Road speed and volume by direction and hour](screenshots/Screenshot%202026-11-09%20085451.png)
+
+*Tidal flow on Tuen Mun Road. Eastbound is slower in the morning; westbound is slower in the evening.*
+
+![Anomaly table and counts by hour](screenshots/Screenshot%202026-11-09%20085527.png)
+
+*Anomalies. 272 detector-hours were much slower than that detector's usual speed for the same hour.*
+
+![Archive coverage by hour and the detectors with the most bad rows](screenshots/Screenshot%202026-11-09%20085604.png)
+
+*Data trust. About 74% of the expected raw files arrived; one detector flags 66% of its rows as bad.*
 
 ## Findings
 
-Run on five real weekdays (Mon 2026-10-26 to Fri 2026-10-30): 5,120 raw files, 20.4 million lane readings, processed in
-about 13 minutes on a 1-core machine with 4 GB of RAM. Details and caveats: [docs/FINDINGS_5_WEEKDAYS.md](docs/FINDINGS_5_WEEKDAYS.md).
+The screenshots above are five weekdays, Monday 2026-11-02 to Friday 2026-11-06: 5,321 raw files, 22.0 million lane
+readings, 92,847 detector-hours (783 detectors with data, out of 807 in the location file).
 
-- **The weekday evening peak is the worst hour**: 65 km/h at 18:00 against 73 km/h at midday (volume-weighted); the evening peak is
-  6.4% slower than midday, the morning peak 4.3%.
-- **Congestion is concentrated**: 5 of 80 corridors hold 31% of all congested readings, and 80% of detectors are congested less
-  than 1% of the time.
-- **Tidal flow is visible**: on Tuen Mun Road the eastbound direction slows 7.9% in the morning and the westbound direction
-  6.2% in the evening, while the opposite directions barely change.
-- **A multi-detector slowdown stands out**: Island Eastern Corridor on Friday 30 October, 18:00 - 19:00, down to 8 - 11 km/h
-  against 76 - 87 km/h usually, flagged by 4 - 5 detectors at once (not yet checked against incident reports).
-- **Data trust**: only 68 - 74% of the expected raw files exist; invalid readings rose from 0.21% to 1.21% over two days;
-  six detectors went silent; one detector flags 68% of its rows as bad.
+- **18:00 is the slowest hour**: 65.3 km/h, with 3.5% of lane readings congested. Against midday at 72.4 km/h (11:00–14:59),
+  the morning peak is 5.7% slower and the evening peak 5.9% slower. Across the week the average speed is 71.6 km/h, and 1.2%
+  of usable lane readings are congested.
+- **Congestion is concentrated**: 5 of 80 corridors hold 32% of all congested readings, the top 10 hold 51%, and 628 of 783
+  detectors (80%) are congested less than 1% of the time.
+- **Tidal flow is visible on Tuen Mun Road**: eastbound is 9.3% slower than midday in the morning and 1.1% slower in the
+  evening; westbound is not slower in the morning and is 6.5% slower in the evening.
+- **A high-volume slowdown stands out**: Lion Rock Tunnel Road near Fung Shing Court on Thursday 5 November, 16:00–17:00,
+  about 9 km/h against about 80 km/h usually. At 09:00 that same day, eight detectors on Island Eastern Corridor flagged
+  together. Rows with only one or two vehicles can rank at the top of the drop table; those are not a jam.
+- **Data trust**: 72–76% of the expected raw files arrived (73.9% over the five days). Bad rows are 0.81% of lane readings.
+  TDS90018 on Tuen Mun Road flags 66% of its rows as bad. The thinnest hour is 3 November at 18:00, with 61% coverage.
 
 ## Benchmark
 
@@ -199,10 +212,9 @@ CI (GitHub Actions) runs lint and the full test suite with Java and PostgreSQL.
 src/hktraffic/   config, parsing, archive, archive_api, spark_jobs, quality, serve, synthetic, benchmark, cli
 dags/            hk_traffic_daily.py
 sql/             analytics.sql (serving layer)
-powerbi/         BUILD_GUIDE.md, measures.dax, theme.json, INSIGHTS_TO_TEST.md
+powerbi/         HKTraffic.pbip, theme.json, build_pbip.py
 docker/          airflow.Dockerfile (Airflow + Java + PySpark)
 tests/           unit + Spark + PostgreSQL tests, real fixtures
-docs/            data_findings.md, VERIFY_BEFORE_PUBLISHING.md
 ```
 
 ## Limitations and next steps

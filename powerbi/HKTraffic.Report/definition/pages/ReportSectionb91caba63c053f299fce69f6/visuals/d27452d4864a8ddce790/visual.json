@@ -17,7 +17,17 @@
           "properties": {
             "paragraphs": [
               {
-                "textRuns": []
+                "textRuns": [
+                  {
+                    "value": "工作日晚高峰比午间慢 5.9%（18:00 最慢，65 km/h）",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "16px",
+                      "fontWeight": "bold",
+                      "color": "#111827"
+                    }
+                  }
+                ]
               }
             ]
           }

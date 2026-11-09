@@ -17,7 +17,17 @@
           "properties": {
             "paragraphs": [
               {
-                "textRuns": []
+                "textRuns": [
+                  {
+                    "value": "前 5 条走廊占了 32% 的拥堵读数，前 10 占 51%",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "16px",
+                      "fontWeight": "bold",
+                      "color": "#111827"
+                    }
+                  }
+                ]
               }
             ]
           }
