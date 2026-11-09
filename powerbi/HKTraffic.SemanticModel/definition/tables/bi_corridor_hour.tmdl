@@ -1,0 +1,92 @@
+table bi_corridor_hour
+	lineageTag: e3204783-fb3f-44ec-811e-a93b22204d49
+
+	column corridor
+		dataType: string
+		lineageTag: 4f4d9b1a-4ed2-44b6-bf3f-2596e60fcc14
+		summarizeBy: none
+		sourceColumn: corridor
+
+	column travel_direction
+		dataType: string
+		lineageTag: 4215379b-2e12-4a86-8ceb-915c2407fd35
+		summarizeBy: none
+		sourceColumn: travel_direction
+
+	column obs_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: c32f28d3-ac4a-4a36-85fd-c452a369a9cf
+		summarizeBy: none
+		sourceColumn: obs_date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a931310-a693-404b-99a8-6b73cdf0380d
+		summarizeBy: none
+		sourceColumn: hour
+
+	column iso_dow
+		dataType: int64
+		formatString: 0
+		lineageTag: f03de9bd-a9a1-43c8-a158-97ea9fbc1a8d
+		summarizeBy: none
+		sourceColumn: iso_dow
+
+	column weekday
+		dataType: string
+		lineageTag: 47ee2f14-43ac-4dcd-88b9-064740f59819
+		summarizeBy: none
+		sourceColumn: weekday
+		sortByColumn: iso_dow
+
+	column day_type
+		dataType: string
+		lineageTag: 64d2319e-7f16-46b2-9ccf-55e21fca1007
+		summarizeBy: none
+		sourceColumn: day_type
+
+	column detectors
+		dataType: int64
+		formatString: #,0
+		lineageTag: db9c18e1-d928-4777-9eb8-63e5c7ceda08
+		summarizeBy: sum
+		sourceColumn: detectors
+
+	column wavg_speed
+		dataType: double
+		formatString: 0.0
+		lineageTag: 726a9f07-f6f6-455c-a970-15271c54ca95
+		summarizeBy: none
+		sourceColumn: wavg_speed
+
+	column volume
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4800e282-6969-4901-afa7-1b5a9842bbd9
+		summarizeBy: sum
+		sourceColumn: volume
+
+	column congested_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 0f5b39ab-1f0e-4a5f-8c0a-20737d8b8577
+		summarizeBy: none
+		sourceColumn: congested_share
+
+	partition bi_corridor_hour = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_corridor_hour.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"corridor", type text}, {"travel_direction", type text}, {"obs_date", type date}, {"hour", Int64.Type}, {"iso_dow", Int64.Type}, {"weekday", type text}, {"day_type", type text}, {"detectors", Int64.Type}, {"wavg_speed", type number}, {"volume", Int64.Type}, {"congested_share", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

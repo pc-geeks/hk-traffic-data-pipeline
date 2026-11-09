@@ -1,0 +1,32 @@
+relationship 05a7f7b0-0d0c-4735-9417-d531414069d3
+	fromColumn: bi_detector_hour.obs_date
+	toColumn: Date.Date
+
+relationship 9177cce4-29ac-4bc8-b361-36c3e557f644
+	fromColumn: bi_corridor_hour.obs_date
+	toColumn: Date.Date
+
+relationship f0ee3bd2-65b3-4c55-b58f-2c9c6f287457
+	fromColumn: bi_anomaly.obs_date
+	toColumn: Date.Date
+
+relationship 22b8d216-548b-4ea1-a935-97422d39e207
+	fromColumn: bi_coverage_hour.obs_date
+	toColumn: Date.Date
+
+relationship 87d685c5-ce76-4309-93a0-f16956186512
+	fromColumn: bi_detector_hour.hour
+	toColumn: Hour.Hour
+
+relationship 422325eb-c640-48df-a1f7-c971909a1856
+	fromColumn: bi_corridor_hour.hour
+	toColumn: Hour.Hour
+
+relationship cda5661e-7e7a-4310-855b-bdac210ccedb
+	fromColumn: bi_anomaly.hour
+	toColumn: Hour.Hour
+
+relationship b52b9a65-e41b-47c9-8a68-e0f7271f1bcc
+	fromColumn: bi_coverage_hour.hour
+	toColumn: Hour.Hour
+

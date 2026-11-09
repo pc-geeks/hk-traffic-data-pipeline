@@ -1,0 +1,77 @@
+table bi_detector_quality
+	lineageTag: 4db06154-718e-450c-953d-d6a0423e72a3
+
+	column detector_id
+		dataType: string
+		lineageTag: ef9c7a0a-9fce-42ae-a32d-4562db90a8a6
+		summarizeBy: none
+		sourceColumn: detector_id
+
+	column corridor
+		dataType: string
+		lineageTag: 24eb3bfb-92b2-41ef-8f2d-2a8cc1673592
+		summarizeBy: none
+		sourceColumn: corridor
+
+	column location
+		dataType: string
+		lineageTag: 79e99da1-c717-4466-b801-1f72b5d473b1
+		summarizeBy: none
+		sourceColumn: location
+
+	column district
+		dataType: string
+		lineageTag: 307fdda3-b982-48bf-b4be-aa1b36fd0b3a
+		summarizeBy: none
+		sourceColumn: district
+
+	column latitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: 12df7ecd-5e05-49f6-9e70-39be6471b036
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: be47cb44-8bfb-45c9-a777-0583fa46c54c
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column lane_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7cb897eb-cddf-4bcc-8192-6986f11522aa
+		summarizeBy: sum
+		sourceColumn: lane_rows
+
+	column bad_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4f5e8ff5-2dc9-456a-9a8d-d664d7595838
+		summarizeBy: sum
+		sourceColumn: bad_rows
+
+	column bad_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: d6d64eca-d9cf-4466-9811-01b1cc080af0
+		summarizeBy: none
+		sourceColumn: bad_share
+
+	partition bi_detector_quality = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_detector_quality.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"detector_id", type text}, {"corridor", type text}, {"location", type text}, {"district", type text}, {"latitude", type number}, {"longitude", type number}, {"lane_rows", Int64.Type}, {"bad_rows", Int64.Type}, {"bad_share", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

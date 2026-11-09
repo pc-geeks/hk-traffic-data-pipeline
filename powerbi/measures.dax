@@ -1,0 +1,115 @@
+// =====================================================================================================
+// DAX for the HK traffic dashboard.  NOT tested in Power BI Desktop by the author (no Windows there):
+// paste the measures one at a time and fix table / column names if you named things differently.
+//
+// Tables (CSV files from `hktraffic export-bi`, table name = file name):
+//   bi_detector_hour, bi_corridor_hour, bi_hotspot, bi_anomaly, bi_coverage_hour,
+//   bi_detector_quality, bi_pipeline_run
+// Boolean-like columns are 0/1 (low_coverage, is_anomaly). Shares are fractions (0.25 = 25%).
+// Create an empty table called _Measures (Home > Enter data) and keep all measures there.
+// =====================================================================================================
+
+// ---------------------------------------------------------------- helper tables (Modeling > New table)
+Date = CALENDAR ( MIN ( bi_detector_hour[obs_date] ), MAX ( bi_detector_hour[obs_date] ) )
+
+Hour =
+SELECTCOLUMNS (
+    GENERATESERIES ( 0, 23, 1 ),
+    "Hour", [Value],
+    "Hour Label", FORMAT ( [Value], "00" ) & ":00"
+)
+// Relationships: Date[Date] 1-* bi_detector_hour[obs_date], bi_corridor_hour[obs_date], bi_anomaly[obs_date],
+//                bi_coverage_hour[obs_date];  Hour[Hour] 1-* the `hour` column of the same four tables.
+// Set column `weekday` to "Sort by column" = iso_dow (in bi_detector_hour and bi_corridor_hour).
+
+// ---------------------------------------------------------------------------------- core speed measures
+// Speed is averaged WEIGHTED BY VOLUME and only over hours with enough data (low_coverage = 0).
+Avg Speed (km/h) =
+VAR _t =
+    FILTER (
+        bi_detector_hour,
+        bi_detector_hour[low_coverage] = 0 && NOT ISBLANK ( bi_detector_hour[wavg_speed] )
+    )
+RETURN
+    DIVIDE (
+        SUMX ( _t, bi_detector_hour[wavg_speed] * bi_detector_hour[volume] ),
+        SUMX ( _t, bi_detector_hour[volume] )
+    )
+
+// Share of lane-periods that were slow AND occupied (or standstill), over usable rows
+Congested Share =
+CALCULATE (
+    DIVIDE ( SUM ( bi_detector_hour[congested_rows] ), SUM ( bi_detector_hour[usable_rows] ) ),
+    bi_detector_hour[low_coverage] = 0
+)
+
+Total Volume = CALCULATE ( SUM ( bi_detector_hour[volume] ), bi_detector_hour[low_coverage] = 0 )
+
+Detectors Reporting = DISTINCTCOUNT ( bi_detector_hour[detector_id] )
+
+// ---------------------------------------------------------------------------------- daily rhythm / peaks
+// The hour windows below are choices, not facts. Change them if the hour profile suggests other peaks.
+Speed Midday Weekday =
+CALCULATE (
+    [Avg Speed (km/h)],
+    bi_detector_hour[day_type] = "weekday",
+    bi_detector_hour[hour] IN { 11, 12, 13, 14 }
+)
+
+Speed Morning Peak Weekday =
+CALCULATE (
+    [Avg Speed (km/h)],
+    bi_detector_hour[day_type] = "weekday",
+    bi_detector_hour[hour] IN { 7, 8, 9 }
+)
+
+Speed Evening Peak Weekday =
+CALCULATE (
+    [Avg Speed (km/h)],
+    bi_detector_hour[day_type] = "weekday",
+    bi_detector_hour[hour] IN { 17, 18, 19 }
+)
+
+// How much speed is lost at the evening peak compared with midday (0.2 = 20% slower)
+Evening Peak Slowdown % = DIVIDE ( [Speed Midday Weekday] - [Speed Evening Peak Weekday], [Speed Midday Weekday] )
+Morning Peak Slowdown % = DIVIDE ( [Speed Midday Weekday] - [Speed Morning Peak Weekday], [Speed Midday Weekday] )
+
+Weekday Speed = CALCULATE ( [Avg Speed (km/h)], bi_detector_hour[day_type] = "weekday" )
+Weekend Speed = CALCULATE ( [Avg Speed (km/h)], bi_detector_hour[day_type] = "weekend" )
+
+// ---------------------------------------------------------------------------------- corridors / tidal flow
+// bi_corridor_hour is already aggregated per corridor, direction, date and hour (low-coverage hours removed)
+Corridor Speed (km/h) =
+VAR _t = FILTER ( bi_corridor_hour, NOT ISBLANK ( bi_corridor_hour[wavg_speed] ) )
+RETURN
+    DIVIDE (
+        SUMX ( _t, bi_corridor_hour[wavg_speed] * bi_corridor_hour[volume] ),
+        SUMX ( _t, bi_corridor_hour[volume] )
+    )
+
+Corridor Volume = SUM ( bi_corridor_hour[volume] )
+
+Corridor Congested Share = AVERAGE ( bi_corridor_hour[congested_share] )
+
+// ---------------------------------------------------------------------------------------------- anomalies
+Anomaly Count = CALCULATE ( COUNTROWS ( bi_anomaly ), bi_anomaly[is_anomaly] = 1 )
+
+Avg Anomaly Drop % = CALCULATE ( AVERAGE ( bi_anomaly[drop_share] ), bi_anomaly[is_anomaly] = 1 )
+
+// ------------------------------------------------------------------------------------------- data trust
+Bad Row Share = DIVIDE ( SUM ( bi_detector_hour[bad_rows] ), SUM ( bi_detector_hour[lane_rows] ) )
+
+Avg Hour Coverage = AVERAGE ( bi_coverage_hour[avg_coverage] )
+
+Low Coverage Hours % = AVERAGE ( bi_coverage_hour[low_coverage_share] )
+
+// Share of the raw files that exist: 1440 per day expected (one per minute)
+Raw File Completeness =
+VAR _days = CALCULATE ( DISTINCTCOUNT ( bi_pipeline_run[day] ), bi_pipeline_run[kind] = "raw" )
+RETURN
+    DIVIDE ( CALCULATE ( SUM ( bi_pipeline_run[files] ), bi_pipeline_run[kind] = "raw" ), _days * 1440 )
+
+// Dynamic page title: states the number instead of a generic label
+Title Speed =
+"Average speed " & FORMAT ( [Avg Speed (km/h)], "0" ) & " km/h, " &
+FORMAT ( [Congested Share], "0.0%" ) & " of lane readings congested"

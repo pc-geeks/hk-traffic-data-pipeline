@@ -1,0 +1,349 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "4735e3af86c2b66d66f1",
+  "position": {
+    "x": 644,
+    "y": 400,
+    "z": 5000,
+    "height": 308,
+    "width": 624,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "day"
+                }
+              },
+              "queryRef": "bi_pipeline_run.day",
+              "nativeQueryRef": "日期",
+              "displayName": "日期"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "kind"
+                }
+              },
+              "queryRef": "bi_pipeline_run.kind",
+              "nativeQueryRef": "类型",
+              "displayName": "类型"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "files"
+                }
+              },
+              "queryRef": "bi_pipeline_run.files",
+              "nativeQueryRef": "文件数",
+              "displayName": "文件数"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "rows"
+                }
+              },
+              "queryRef": "bi_pipeline_run.rows",
+              "nativeQueryRef": "行数",
+              "displayName": "行数"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "ok_rows"
+                }
+              },
+              "queryRef": "bi_pipeline_run.ok_rows",
+              "nativeQueryRef": "正常行",
+              "displayName": "正常行"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "invalid_rows"
+                }
+              },
+              "queryRef": "bi_pipeline_run.invalid_rows",
+              "nativeQueryRef": "无效行",
+              "displayName": "无效行"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "out_of_range_rows"
+                }
+              },
+              "queryRef": "bi_pipeline_run.out_of_range_rows",
+              "nativeQueryRef": "超范围",
+              "displayName": "超范围"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "standstill_rows"
+                }
+              },
+              "queryRef": "bi_pipeline_run.standstill_rows",
+              "nativeQueryRef": "停车",
+              "displayName": "停车"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi_pipeline_run"
+                    }
+                  },
+                  "Property": "parse_error_rows"
+                }
+              },
+              "queryRef": "bi_pipeline_run.parse_error_rows",
+              "nativeQueryRef": "解析错误",
+              "displayName": "解析错误"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "bi_pipeline_run"
+                  }
+                },
+                "Property": "day"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'每日管道运行'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E5E7EB'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'完整一天应有 1440 个原始文件'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

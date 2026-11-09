@@ -1,0 +1,53 @@
+table bi_coverage_hour
+	lineageTag: 6ba85882-77b9-458c-89a1-9dc5cf30ae4f
+
+	column obs_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: eeee1dbc-f705-408f-b10e-f4b68be06973
+		summarizeBy: none
+		sourceColumn: obs_date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 7293e3fe-69fb-4422-9550-e232b4b50081
+		summarizeBy: none
+		sourceColumn: hour
+
+	column detectors_reporting
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6a3d062e-51b2-4156-b78d-fa7aee2eb2d6
+		summarizeBy: sum
+		sourceColumn: detectors_reporting
+
+	column avg_coverage
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 2263f7be-c5b8-4bdf-8474-2d1c4f41c044
+		summarizeBy: none
+		sourceColumn: avg_coverage
+
+	column low_coverage_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 659a9748-b862-4dfc-8e02-15948fd5536f
+		summarizeBy: none
+		sourceColumn: low_coverage_share
+
+	partition bi_coverage_hour = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_coverage_hour.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"obs_date", type date}, {"hour", Int64.Type}, {"detectors_reporting", Int64.Type}, {"avg_coverage", type number}, {"low_coverage_share", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,134 @@
+table bi_anomaly
+	lineageTag: 3bff410a-3572-45c6-acf2-b1775f825724
+
+	column obs_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: bdd57bd4-023b-4ee3-bdfc-5be99af95521
+		summarizeBy: none
+		sourceColumn: obs_date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: b7fffdb2-32ed-4a59-a1be-30b6275603f7
+		summarizeBy: none
+		sourceColumn: hour
+
+	column detector_id
+		dataType: string
+		lineageTag: 20bdbe90-07cd-48ef-8c37-e2e5b825b48f
+		summarizeBy: none
+		sourceColumn: detector_id
+
+	column corridor
+		dataType: string
+		lineageTag: 8767a99a-5139-4617-89a3-1899661b6ca7
+		summarizeBy: none
+		sourceColumn: corridor
+
+	column location
+		dataType: string
+		lineageTag: 0b60340f-5bda-4e2a-b9d9-de59badcf50a
+		summarizeBy: none
+		sourceColumn: location
+
+	column travel_direction
+		dataType: string
+		lineageTag: a0a62d10-e814-4c95-bd0c-f0d372ea7d19
+		summarizeBy: none
+		sourceColumn: travel_direction
+
+	column district
+		dataType: string
+		lineageTag: de37239d-faf7-431d-b363-f57db906cd36
+		summarizeBy: none
+		sourceColumn: district
+
+	column latitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: ae02ee13-d6ce-4b5c-854c-f9cfdeff0f1f
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: 56fde7ab-a9a9-4d09-8779-4f3445c93988
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column wavg_speed
+		dataType: double
+		formatString: 0.0
+		lineageTag: 702d1d12-8596-4919-b845-9ab0f56fd2d8
+		summarizeBy: none
+		sourceColumn: wavg_speed
+
+	column baseline_mean
+		dataType: double
+		formatString: 0.0
+		lineageTag: cd8a8c65-0219-4bdd-99f9-38de72b1321f
+		summarizeBy: none
+		sourceColumn: baseline_mean
+
+	column baseline_std
+		dataType: double
+		formatString: 0.00
+		lineageTag: 29686fb9-4a53-4316-bbe9-47f773954454
+		summarizeBy: none
+		sourceColumn: baseline_std
+
+	column baseline_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e43cc2f-0187-45cc-8b67-2dbe78c22bb9
+		summarizeBy: none
+		sourceColumn: baseline_days
+
+	column drop_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: e674403c-3475-40c2-ba52-f7ba87240dd1
+		summarizeBy: none
+		sourceColumn: drop_share
+
+	column z_score
+		dataType: double
+		formatString: 0.00
+		lineageTag: ca191b46-9881-4dcc-ac2a-56985d995a05
+		summarizeBy: none
+		sourceColumn: z_score
+
+	column is_anomaly
+		dataType: int64
+		formatString: 0
+		lineageTag: 124ad4b1-6172-407f-a8a8-043ac95b2c93
+		summarizeBy: none
+		sourceColumn: is_anomaly
+
+	column volume
+		dataType: int64
+		formatString: #,0
+		lineageTag: a27b4061-d2c2-4361-835a-883a40f3bf28
+		summarizeBy: sum
+		sourceColumn: volume
+
+	partition bi_anomaly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_anomaly.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"obs_date", type date}, {"hour", Int64.Type}, {"detector_id", type text}, {"corridor", type text}, {"location", type text}, {"travel_direction", type text}, {"district", type text}, {"latitude", type number}, {"longitude", type number}, {"wavg_speed", type number}, {"baseline_mean", type number}, {"baseline_std", type number}, {"baseline_days", Int64.Type}, {"drop_share", type number}, {"z_score", type number}, {"is_anomaly", Int64.Type}, {"volume", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

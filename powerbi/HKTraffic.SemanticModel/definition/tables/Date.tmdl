@@ -1,0 +1,18 @@
+table Date
+	lineageTag: 16c3f728-9812-40c6-ae1c-5f09bf2aa279
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 7719a0f9-7f0c-4f29-ada3-a65bff41696a
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Date = calculated
+		mode: import
+		source = CALENDAR ( MIN ( bi_detector_hour[obs_date] ), MAX ( bi_detector_hour[obs_date] ) )
+
+	annotation PBI_ResultType = Table
+

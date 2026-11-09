@@ -1,0 +1,5 @@
+expression DataPath = "G:/MyGithub/self-learn-autumn/hk-traffic/hk-traffic-pipeline/hk-traffic-pipeline/powerbi/bi_data" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: fef08d3f-0469-412b-b598-a51f10421538
+
+	annotation PBI_ResultType = Text
+

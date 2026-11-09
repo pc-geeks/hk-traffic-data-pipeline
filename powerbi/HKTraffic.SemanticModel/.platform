@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "HK Traffic"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "09d612cd-b994-433d-ba3a-b70017f823b1"
+  }
+}

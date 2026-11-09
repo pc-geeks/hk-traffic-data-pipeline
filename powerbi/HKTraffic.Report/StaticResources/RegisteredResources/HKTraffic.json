@@ -1,0 +1,22 @@
+{
+  "name": "HKTraffic",
+  "dataColors": [
+    "#0F766E",
+    "#F59E0B",
+    "#DC2626",
+    "#2563EB",
+    "#7C3AED",
+    "#64748B",
+    "#16A34A",
+    "#DB2777"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1F2937",
+  "tableAccent": "#0F766E",
+  "good": "#16A34A",
+  "neutral": "#F59E0B",
+  "bad": "#DC2626",
+  "minimum": "#16A34A",
+  "center": "#F59E0B",
+  "maximum": "#DC2626"
+}

@@ -1,0 +1,893 @@
+cultureInfo en-US
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "bi_detector_hour.weekday": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_detector_hour",
+			          "ConceptualProperty": "weekday"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "星期": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_detector_hour.day_type": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_detector_hour",
+			          "ConceptualProperty": "day_type"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "日类型": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "hour.hour_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Hour",
+			          "ConceptualProperty": "Hour Label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "小时": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.congested_share": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Congested Share"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "拥堵占比": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.avg_speed_km_h": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Avg Speed (km/h)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "速度 km/h": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.total_volume": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Total Volume"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "流量": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.top_corridor_congestion": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Top Corridor Congestion"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "平均拥堵占比": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.corridor_speed_km_h": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Corridor Speed (km/h)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "速度 km/h": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.corridor_volume": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Corridor Volume"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "流量": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.avg_hour_coverage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Avg Hour Coverage"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "覆盖率": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.top_detector_bad_share": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Top Detector Bad Share"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "坏数据占比": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.corridor": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "corridor"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "走廊": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.rank": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "rank"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "排名": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.location": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "location"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "位置": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.district": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "district"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "地区": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.peak_hour": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "peak_hour"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "最堵小时": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.mean_speed_kmh": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "mean_speed_kmh"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "速度 km/h": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_hotspot.detector_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_hotspot",
+			          "ConceptualProperty": "detector_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "探测器": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_corridor_hour.travel_direction": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_corridor_hour",
+			          "ConceptualProperty": "travel_direction"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "方向": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_corridor_hour.corridor": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_corridor_hour",
+			          "ConceptualProperty": "corridor"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "走廊": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.obs_date": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "obs_date"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "日期": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.hour": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "hour"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "小时": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.corridor": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "corridor"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "走廊": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.location": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "location"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "位置": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.wavg_speed": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "wavg_speed"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "速度 km/h": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.baseline_mean": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "baseline_mean"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "平时速度": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_anomaly.drop_share": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_anomaly",
+			          "ConceptualProperty": "drop_share"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "降幅": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.day": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "day"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "日期": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.kind": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "kind"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "类型": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.files": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "files"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "文件数": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.rows": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "rows"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "行数": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.ok_rows": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "ok_rows"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "正常行": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.invalid_rows": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "invalid_rows"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "无效行": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.out_of_range_rows": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "out_of_range_rows"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "超范围": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.standstill_rows": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "standstill_rows"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "停车": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_pipeline_run.parse_error_rows": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_pipeline_run",
+			          "ConceptualProperty": "parse_error_rows"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "解析错误": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_coverage_hour.obs_date": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_coverage_hour",
+			          "ConceptualProperty": "obs_date"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "日期": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_detector_quality.detector_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_detector_quality",
+			          "ConceptualProperty": "detector_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "探测器": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_detector_quality.corridor": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_detector_quality",
+			          "ConceptualProperty": "corridor"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "走廊": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_detector_quality.location": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_detector_quality",
+			          "ConceptualProperty": "location"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "位置": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "bi_detector_quality.district": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "bi_detector_quality",
+			          "ConceptualProperty": "district"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "地区": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_measures.anomaly_count": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Anomaly Count"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "异常次数": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

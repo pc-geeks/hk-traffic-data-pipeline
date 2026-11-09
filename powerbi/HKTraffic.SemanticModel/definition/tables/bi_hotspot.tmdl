@@ -1,0 +1,111 @@
+table bi_hotspot
+	lineageTag: e2eb1050-203a-4796-a7ec-6044e0d9956b
+
+	column rank
+		dataType: int64
+		formatString: 0
+		lineageTag: f24eab53-0cf7-403b-b8e4-b78a2f3f1cf9
+		summarizeBy: none
+		sourceColumn: rank
+
+	column detector_id
+		dataType: string
+		lineageTag: 646f6d8f-53ae-44e3-aa9a-6a30eb525ffe
+		summarizeBy: none
+		sourceColumn: detector_id
+
+	column corridor
+		dataType: string
+		lineageTag: 21c05ee6-1f77-476f-9384-59cd5550c1e6
+		summarizeBy: none
+		sourceColumn: corridor
+
+	column location
+		dataType: string
+		lineageTag: 380f8d20-bee2-47f6-bb5a-12b3c6da8a17
+		summarizeBy: none
+		sourceColumn: location
+
+	column travel_direction
+		dataType: string
+		lineageTag: 72ce3df5-0e41-42dc-ba95-7792bd85818c
+		summarizeBy: none
+		sourceColumn: travel_direction
+
+	column district
+		dataType: string
+		lineageTag: 5cfed37e-440c-47a2-8d3c-a4b8fa869fd8
+		summarizeBy: none
+		sourceColumn: district
+
+	column latitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: 0a793f84-82b2-49e4-b7f5-d156f4cbedf0
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: 5623d49a-7bd4-42a6-9c1e-42adfa917c7d
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column mean_congested_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 6fb8e4b8-1b76-4216-9ca8-678b23ccb449
+		summarizeBy: none
+		sourceColumn: mean_congested_share
+
+	column mean_speed_kmh
+		dataType: double
+		formatString: 0.0
+		lineageTag: c1efccb9-0c3b-4dfb-be86-5de55d2d82af
+		summarizeBy: none
+		sourceColumn: mean_speed_kmh
+
+	column days_observed
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b56a491-933e-4b44-979f-638f9c629c76
+		summarizeBy: none
+		sourceColumn: days_observed
+
+	column hours_observed
+		dataType: int64
+		formatString: #,0
+		lineageTag: 57c4af68-beb9-4eee-a819-c0c5789b33cf
+		summarizeBy: none
+		sourceColumn: hours_observed
+
+	column peak_hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 922dfea9-800b-4bc1-a584-391edcbb7bc2
+		summarizeBy: none
+		sourceColumn: peak_hour
+
+	column peak_hour_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 0f332f83-ecd9-427c-9f5c-b55070ef7196
+		summarizeBy: none
+		sourceColumn: peak_hour_share
+
+	partition bi_hotspot = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_hotspot.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"rank", Int64.Type}, {"detector_id", type text}, {"corridor", type text}, {"location", type text}, {"travel_direction", type text}, {"district", type text}, {"latitude", type number}, {"longitude", type number}, {"mean_congested_share", type number}, {"mean_speed_kmh", type number}, {"days_observed", Int64.Type}, {"hours_observed", Int64.Type}, {"peak_hour", Int64.Type}, {"peak_hour_share", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

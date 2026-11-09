@@ -1,0 +1,191 @@
+table _Measures
+	lineageTag: bd1e6db8-50e9-4635-a149-795abbd55149
+
+	measure 'Avg Speed (km/h)' =
+			VAR _t =
+			    FILTER (
+			        bi_detector_hour,
+			        bi_detector_hour[low_coverage] = 0 && NOT ISBLANK ( bi_detector_hour[wavg_speed] )
+			    )
+			RETURN
+			    DIVIDE (
+			        SUMX ( _t, bi_detector_hour[wavg_speed] * bi_detector_hour[volume] ),
+			        SUMX ( _t, bi_detector_hour[volume] )
+			    )
+		formatString: 0.0
+		displayFolder: Speed
+		lineageTag: cb2e72b1-aa8a-487e-bc34-9e815f0a7cfb
+
+	measure 'Congested Share' =
+			CALCULATE (
+			    DIVIDE ( SUM ( bi_detector_hour[congested_rows] ), SUM ( bi_detector_hour[usable_rows] ) ),
+			    bi_detector_hour[low_coverage] = 0
+			)
+		formatString: 0.0%
+		displayFolder: Speed
+		lineageTag: 92e867f3-86b7-4993-a757-5ea48019bf95
+
+	measure 'Total Volume' = CALCULATE ( SUM ( bi_detector_hour[volume] ), bi_detector_hour[low_coverage] = 0 )
+		formatString: #,0
+		displayFolder: Speed
+		lineageTag: 8bb1797f-85a0-46d3-b905-cd8f76d8d9c3
+
+	measure 'Detectors Reporting' = DISTINCTCOUNT ( bi_detector_hour[detector_id] )
+		formatString: #,0
+		displayFolder: Speed
+		lineageTag: 65f1f757-811b-4ae7-9e5b-b6730a92b3bb
+
+	measure 'Speed Midday Weekday' =
+			CALCULATE (
+			    [Avg Speed (km/h)],
+			    bi_detector_hour[day_type] = "weekday",
+			    bi_detector_hour[hour] IN { 11, 12, 13, 14 }
+			)
+		formatString: 0.0
+		displayFolder: Speed
+		lineageTag: a8e9d008-176c-4819-bff9-7d10e437510c
+
+	measure 'Speed Morning Peak Weekday' =
+			CALCULATE (
+			    [Avg Speed (km/h)],
+			    bi_detector_hour[day_type] = "weekday",
+			    bi_detector_hour[hour] IN { 7, 8, 9 }
+			)
+		formatString: 0.0
+		displayFolder: Speed
+		lineageTag: a0fc012e-3161-4e33-b5db-2d5f05450983
+
+	measure 'Speed Evening Peak Weekday' =
+			CALCULATE (
+			    [Avg Speed (km/h)],
+			    bi_detector_hour[day_type] = "weekday",
+			    bi_detector_hour[hour] IN { 17, 18, 19 }
+			)
+		formatString: 0.0
+		displayFolder: Speed
+		lineageTag: 2a12bd25-f191-4478-84e0-c134c822eab4
+
+	measure 'Evening Peak Slowdown %' = DIVIDE ( [Speed Midday Weekday] - [Speed Evening Peak Weekday], [Speed Midday Weekday] )
+		formatString: 0.0%
+		displayFolder: Speed
+		lineageTag: e7c46312-9732-4fef-b1e4-4d1cc9def845
+
+	measure 'Morning Peak Slowdown %' = DIVIDE ( [Speed Midday Weekday] - [Speed Morning Peak Weekday], [Speed Midday Weekday] )
+		formatString: 0.0%
+		displayFolder: Speed
+		lineageTag: e82fdf46-1b3b-4ae2-9c7f-34b7461e36e0
+
+	measure 'Weekday Speed' = CALCULATE ( [Avg Speed (km/h)], bi_detector_hour[day_type] = "weekday" )
+		formatString: 0.0
+		displayFolder: Speed
+		lineageTag: 595d4cb6-54b1-4843-b249-2c73030d273a
+
+	measure 'Weekend Speed' = CALCULATE ( [Avg Speed (km/h)], bi_detector_hour[day_type] = "weekend" )
+		formatString: 0.0
+		displayFolder: Speed
+		lineageTag: 7c68846f-f679-4e3f-a6da-14d523da7959
+
+	measure 'Corridor Speed (km/h)' =
+			VAR _t = FILTER ( bi_corridor_hour, NOT ISBLANK ( bi_corridor_hour[wavg_speed] ) )
+			RETURN
+			    DIVIDE (
+			        SUMX ( _t, bi_corridor_hour[wavg_speed] * bi_corridor_hour[volume] ),
+			        SUMX ( _t, bi_corridor_hour[volume] )
+			    )
+		formatString: 0.0
+		displayFolder: Corridor
+		lineageTag: d02b4bb0-542d-473e-8aab-568b5d9c764d
+
+	measure 'Corridor Volume' = SUM ( bi_corridor_hour[volume] )
+		formatString: #,0
+		displayFolder: Corridor
+		lineageTag: acd24843-3bf0-423d-8d3b-3dad4ef7e19f
+
+	measure 'Corridor Congested Share' = AVERAGE ( bi_corridor_hour[congested_share] )
+		formatString: 0.0%
+		displayFolder: Corridor
+		lineageTag: db2e28e2-12a0-4d40-9b06-87861e414e82
+
+	measure 'Anomaly Count' = CALCULATE ( COUNTROWS ( bi_anomaly ), bi_anomaly[is_anomaly] = 1 )
+		formatString: #,0
+		displayFolder: Anomaly
+		lineageTag: 0812a556-7f1a-4dd7-b967-968f89f9e740
+
+	measure 'Avg Anomaly Drop %' = CALCULATE ( AVERAGE ( bi_anomaly[drop_share] ), bi_anomaly[is_anomaly] = 1 )
+		formatString: 0.0%
+		displayFolder: Anomaly
+		lineageTag: 433c08e1-5a8f-4ef4-a98c-a7a3aefda039
+
+	measure 'Bad Row Share' = DIVIDE ( SUM ( bi_detector_hour[bad_rows] ), SUM ( bi_detector_hour[lane_rows] ) )
+		formatString: 0.00%
+		displayFolder: Trust
+		lineageTag: a2009b92-f225-4f03-a495-05f3aefe8c3f
+
+	measure 'Avg Hour Coverage' = AVERAGE ( bi_coverage_hour[avg_coverage] )
+		formatString: 0.0%
+		displayFolder: Trust
+		lineageTag: a1e53e98-0188-4f10-8314-3b87043ab8a9
+
+	measure 'Low Coverage Hours %' = AVERAGE ( bi_coverage_hour[low_coverage_share] )
+		formatString: 0.0%
+		displayFolder: Trust
+		lineageTag: 95fe8fb6-1d46-4683-beef-17a7e201de6a
+
+	measure 'Raw File Completeness' =
+			VAR _days = CALCULATE ( DISTINCTCOUNT ( bi_pipeline_run[day] ), bi_pipeline_run[kind] = "raw" )
+			RETURN
+			    DIVIDE ( CALCULATE ( SUM ( bi_pipeline_run[files] ), bi_pipeline_run[kind] = "raw" ), _days * 1440 )
+		formatString: 0.0%
+		displayFolder: Trust
+		lineageTag: ede7cdcf-e366-4198-bddd-5485b0df93d4
+
+	measure 'Title Speed' = "Average speed " & FORMAT ( [Avg Speed (km/h)], "0" ) & " km/h, " & FORMAT ( [Congested Share], "0.0%" ) & " of lane readings congested"
+		displayFolder: Title
+		lineageTag: e65d0e49-e60d-4f39-8604-273f216ec914
+
+	measure 'Top Corridor Congestion' =
+			VAR _rank =
+			    RANKX (
+			        CALCULATETABLE ( VALUES ( bi_hotspot[corridor] ), REMOVEFILTERS ( bi_hotspot[corridor] ) ),
+			        CALCULATE ( AVERAGE ( bi_hotspot[mean_congested_share] ) ),
+			        ,
+			        DESC,
+			        Dense
+			    )
+			RETURN
+			    IF ( _rank <= 10, AVERAGE ( bi_hotspot[mean_congested_share] ) )
+		formatString: 0.0%
+		displayFolder: Hotspot
+		lineageTag: 0e8b4324-61a8-46c7-ae9e-5724dc550498
+
+	measure 'Top Detector Bad Share' =
+			VAR _rank =
+			    RANKX (
+			        CALCULATETABLE (
+			            VALUES ( bi_detector_quality[detector_id] ),
+			            REMOVEFILTERS ( bi_detector_quality[detector_id] )
+			        ),
+			        CALCULATE ( MAX ( bi_detector_quality[bad_share] ) ),
+			        ,
+			        DESC,
+			        Dense
+			    )
+			RETURN
+			    IF ( _rank <= 10, MAX ( bi_detector_quality[bad_share] ) )
+		formatString: 0.0%
+		displayFolder: Trust
+		lineageTag: d8729744-7f7f-4503-b974-3a13e69dd9e8
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: 0277cfd0-ab13-4b6d-85cd-0928590d710a
+		summarizeBy: none
+		sourceColumn: [Dummy]
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW ( "Dummy", BLANK () )
+
+	annotation PBI_ResultType = Table
+

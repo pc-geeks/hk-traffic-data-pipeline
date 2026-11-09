@@ -1,0 +1,43 @@
+# docker compose up -d warehouse   -> only PostgreSQL (serving layer)
+# docker compose up -d --build     -> PostgreSQL + Airflow UI on http://localhost:8080
+# Admin password:  docker compose exec airflow cat /opt/airflow/standalone_admin_password.txt
+# `standalone` = scheduler + webserver + SQLite metadata in one container: fine for a demo, not production.
+services:
+  warehouse:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hktraffic
+    ports:
+      - "5432:5432"
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hktraffic"]
+      interval: 5s
+      retries: 10
+
+  airflow:
+    build:
+      context: .
+      dockerfile: docker/airflow.Dockerfile
+    command: standalone
+    user: "${AIRFLOW_UID:-50000}:0"
+    depends_on:
+      warehouse:
+        condition: service_healthy
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      HKT_DSN: postgresql://postgres:postgres@warehouse:5432/hktraffic
+      HKT_DATA_DIR: /opt/airflow/project/data
+      PYTHONPATH: /opt/airflow/project/src
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/project/src
+      - ./data:/opt/airflow/project/data
+
+volumes:
+  warehouse_data:

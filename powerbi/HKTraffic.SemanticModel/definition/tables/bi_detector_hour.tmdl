@@ -1,0 +1,168 @@
+table bi_detector_hour
+	lineageTag: 0ea07d81-66da-4991-b524-ab10136a092c
+
+	column detector_id
+		dataType: string
+		lineageTag: 586df391-ee56-414d-bada-8a704038934b
+		summarizeBy: none
+		sourceColumn: detector_id
+
+	column corridor
+		dataType: string
+		lineageTag: 62093c76-ff4b-4fd7-899c-6938b7658bf6
+		summarizeBy: none
+		sourceColumn: corridor
+
+	column location
+		dataType: string
+		lineageTag: 77851869-4650-4eef-8ee4-36d9709da23f
+		summarizeBy: none
+		sourceColumn: location
+
+	column travel_direction
+		dataType: string
+		lineageTag: 5ec34f0c-6ca7-4445-bb2e-be1fac154ea8
+		summarizeBy: none
+		sourceColumn: travel_direction
+
+	column district
+		dataType: string
+		lineageTag: e40cd6fe-7fe0-4f77-8fe8-f7889af73d63
+		summarizeBy: none
+		sourceColumn: district
+
+	column latitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: fa9239f1-20dd-428f-9df0-c0310bd15011
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: latitude
+
+	column longitude
+		dataType: double
+		formatString: 0.00000
+		lineageTag: 22b4395e-4603-418f-a10d-ae91b5bf30d2
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: longitude
+
+	column obs_date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 88005c51-9758-4ca4-a694-31ed52990b62
+		summarizeBy: none
+		sourceColumn: obs_date
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 1deefefb-7811-4b14-8f1d-2f859a93cdad
+		summarizeBy: none
+		sourceColumn: hour
+
+	column iso_dow
+		dataType: int64
+		formatString: 0
+		lineageTag: 71225e1b-0e9e-4b46-849a-2c77fd576328
+		summarizeBy: none
+		sourceColumn: iso_dow
+
+	column weekday
+		dataType: string
+		lineageTag: 9753591d-607b-4aa7-8ace-60940676ca48
+		summarizeBy: none
+		sourceColumn: weekday
+		sortByColumn: iso_dow
+
+	column day_type
+		dataType: string
+		lineageTag: ff4fc259-0ea9-4f60-af55-e7557865dad2
+		summarizeBy: none
+		sourceColumn: day_type
+
+	column wavg_speed
+		dataType: double
+		formatString: 0.0
+		lineageTag: dc6d21a9-e17b-4aee-a5e3-f27f7680326b
+		summarizeBy: none
+		sourceColumn: wavg_speed
+
+	column volume
+		dataType: int64
+		formatString: #,0
+		lineageTag: b2871c0a-e9b3-4425-9779-74eee81c5e34
+		summarizeBy: sum
+		sourceColumn: volume
+
+	column avg_occupancy
+		dataType: double
+		formatString: 0.00
+		lineageTag: dd31bb3a-b432-43f9-a711-e917cbda14b9
+		summarizeBy: none
+		sourceColumn: avg_occupancy
+
+	column congested_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 29416113-5b76-421a-bd62-ca7a2a41ff23
+		summarizeBy: none
+		sourceColumn: congested_share
+
+	column congested_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: c18f6dcd-6ce9-4972-ac4c-36d988315998
+		summarizeBy: sum
+		sourceColumn: congested_rows
+
+	column usable_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 3690bcab-f47e-4fd8-9560-91a5a5b875fa
+		summarizeBy: sum
+		sourceColumn: usable_rows
+
+	column lane_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 8a3d0a9f-2f7d-4c63-ae37-c478e705e237
+		summarizeBy: sum
+		sourceColumn: lane_rows
+
+	column bad_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: af81f3e9-959c-41f0-b607-dae369874b23
+		summarizeBy: sum
+		sourceColumn: bad_rows
+
+	column coverage
+		dataType: double
+		formatString: 0.00%
+		lineageTag: e8c59599-5432-449b-a580-6e45ac65bee9
+		summarizeBy: none
+		sourceColumn: coverage
+
+	column low_coverage
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f38088b-39f7-421e-ab00-1b4e3b9fa280
+		summarizeBy: none
+		sourceColumn: low_coverage
+
+	partition bi_detector_hour = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_detector_hour.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"detector_id", type text}, {"corridor", type text}, {"location", type text}, {"travel_direction", type text}, {"district", type text}, {"latitude", type number}, {"longitude", type number}, {"obs_date", type date}, {"hour", Int64.Type}, {"iso_dow", Int64.Type}, {"weekday", type text}, {"day_type", type text}, {"wavg_speed", type number}, {"volume", Int64.Type}, {"avg_occupancy", type number}, {"congested_share", type number}, {"congested_rows", Int64.Type}, {"usable_rows", Int64.Type}, {"lane_rows", Int64.Type}, {"bad_rows", Int64.Type}, {"coverage", type number}, {"low_coverage", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

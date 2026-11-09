@@ -1,0 +1,28 @@
+table Hour
+	lineageTag: 5349be07-2f72-4853-95cc-00201396edbd
+
+	column Hour
+		dataType: int64
+		formatString: 0
+		lineageTag: 78958f63-97f5-403c-8b54-b67313e87285
+		summarizeBy: none
+		sourceColumn: [Hour]
+
+	column 'Hour Label'
+		dataType: string
+		lineageTag: 3bcbc168-0000-44a0-bf64-025468d0e278
+		summarizeBy: none
+		sourceColumn: [Hour Label]
+		sortByColumn: Hour
+
+	partition Hour = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS (
+				    GENERATESERIES ( 0, 23, 1 ),
+				    "Hour", [Value],
+				    "Hour Label", FORMAT ( [Value], "00" ) & ":00"
+				)
+
+	annotation PBI_ResultType = Table
+

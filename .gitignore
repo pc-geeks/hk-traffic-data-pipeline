@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.venv/
+.env
+spark-warehouse/
+metastore_db/
+derby.log
+data/**
+!data/**/
+!data/**/.gitkeep
+powerbi/bi_data/*
+!powerbi/bi_data/.gitkeep
+**/.pbi/

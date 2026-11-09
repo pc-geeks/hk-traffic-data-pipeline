@@ -1,0 +1,94 @@
+table bi_pipeline_run
+	lineageTag: a0361bf7-f104-4b2a-9814-124b6b547008
+
+	column day
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 1d30a759-0c65-4b30-8bfa-f7bdb79c6666
+		summarizeBy: none
+		sourceColumn: day
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column kind
+		dataType: string
+		lineageTag: 6a1c9bd7-18a1-4582-9889-4f660b3723f3
+		summarizeBy: none
+		sourceColumn: kind
+
+	column files
+		dataType: int64
+		formatString: #,0
+		lineageTag: 30704ad8-2368-4532-b160-8c4980cdf348
+		summarizeBy: sum
+		sourceColumn: files
+
+	column rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 020027aa-84bb-45e2-abb1-247d265f641d
+		summarizeBy: sum
+		sourceColumn: rows
+
+	column detectors_reporting
+		dataType: int64
+		formatString: #,0
+		lineageTag: d707ceb9-d1c6-4467-895b-4e547ef4b096
+		summarizeBy: sum
+		sourceColumn: detectors_reporting
+
+	column ok_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 802a044f-afbb-446c-8020-a54874269212
+		summarizeBy: sum
+		sourceColumn: ok_rows
+
+	column invalid_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: a454f31e-fcf9-40b3-85c9-4ded60b3a4a3
+		summarizeBy: sum
+		sourceColumn: invalid_rows
+
+	column out_of_range_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: bb799775-4471-4b21-8665-7cc925aa0aed
+		summarizeBy: sum
+		sourceColumn: out_of_range_rows
+
+	column no_vehicle_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: b1b115f0-95a4-4890-b46b-fb1ae364b09f
+		summarizeBy: sum
+		sourceColumn: no_vehicle_rows
+
+	column standstill_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: bf84db4e-f2c3-4370-8ca6-f45f209cc60a
+		summarizeBy: sum
+		sourceColumn: standstill_rows
+
+	column parse_error_rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 1560ea54-0c5c-4e49-b837-0fb03bb54b7b
+		summarizeBy: sum
+		sourceColumn: parse_error_rows
+
+	partition bi_pipeline_run = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(Text.Combine({#"DataPath", "bi_pipeline_run.csv"}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
+				    Typed = Table.TransformColumnTypes(Cleaned, {{"day", type date}, {"kind", type text}, {"files", Int64.Type}, {"rows", Int64.Type}, {"detectors_reporting", Int64.Type}, {"ok_rows", Int64.Type}, {"invalid_rows", Int64.Type}, {"out_of_range_rows", Int64.Type}, {"no_vehicle_rows", Int64.Type}, {"standstill_rows", Int64.Type}, {"parse_error_rows", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

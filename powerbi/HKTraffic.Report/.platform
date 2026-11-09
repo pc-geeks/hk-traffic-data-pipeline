@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "HK Traffic"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "72d8695b-00f8-4fd7-91e0-ad1ef416b30a"
+  }
+}
