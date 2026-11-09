@@ -39,7 +39,6 @@ from pyspark.java_gateway import local_connect_and_auth  # noqa: E402
 from pyspark.serializers import write_int  # noqa: E402
 from pyspark.worker import main  # noqa: E402
 
-
 if __name__ == "__main__":
     port = int(os.environ["PYTHON_WORKER_FACTORY_PORT"])
     secret = os.environ["PYTHON_WORKER_FACTORY_SECRET"]

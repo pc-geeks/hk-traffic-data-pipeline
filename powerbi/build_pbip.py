@@ -704,7 +704,8 @@ RETURN
     ),
     (
         "Title Speed",
-        '"Average speed " & FORMAT ( [Avg Speed (km/h)], "0" ) & " km/h, " & FORMAT ( [Congested Share], "0.0%" ) & " of lane readings congested"',
+        '"Average speed " & FORMAT ( [Avg Speed (km/h)], "0" ) & " km/h, "'
+        ' & FORMAT ( [Congested Share], "0.0%" ) & " of lane readings congested"',
         "",
         "Title",
     ),
@@ -769,11 +770,16 @@ def m_partition(table: str) -> str:
     pairs = ", ".join(
         f'{{"{column["name"]}", {M_TYPE[column["type"]]}}}' for column in TABLES[table]
     )
+    csv_source = (
+        'Csv.Document(File.Contents(Text.Combine({#"DataPath", '
+        f'"{table}.csv"}}, "/")), '
+        '[Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv])'
+    )
     return f"""\tpartition {tmdl_name(table)} = m
 \t\tmode: import
 \t\tsource =
 \t\t\t\tlet
-\t\t\t\t    Source = Csv.Document(File.Contents(Text.Combine({{#"DataPath", "{table}.csv"}}, "/")), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+\t\t\t\t    Source = {csv_source},
 \t\t\t\t    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 \t\t\t\t    Cleaned = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),
 \t\t\t\t    Typed = Table.TransformColumnTypes(Cleaned, {{{pairs}}})
@@ -877,7 +883,10 @@ def write_model() -> None:
     (definition / "expressions.tmdl").write_text(
         "\n".join(
             [
-                f'expression DataPath = "{DATA_PATH}" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]',
+                (
+                    f'expression DataPath = "{DATA_PATH}" meta '
+                    '[IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]'
+                ),
                 f"\tlineageTag: {guid()}",
                 "",
                 "\tannotation PBI_ResultType = Text",
@@ -937,7 +946,11 @@ def write_model() -> None:
                     "sort": "Hour",
                 },
             ],
-            'SELECTCOLUMNS (\n    GENERATESERIES ( 0, 23, 1 ),\n    "Hour", [Value],\n    "Hour Label", FORMAT ( [Value], "00" ) & ":00"\n)',
+            "SELECTCOLUMNS (\n"
+            "    GENERATESERIES ( 0, 23, 1 ),\n"
+            '    "Hour", [Value],\n'
+            '    "Hour Label", FORMAT ( [Value], "00" ) & ":00"\n'
+            ")",
         ),
         encoding="utf-8",
     )
@@ -1005,13 +1018,38 @@ def build_pages() -> list[tuple[str, str, dict]]:
         rhythm_visuals.append(
             (
                 hid("rhythm kpi " + measure),
-                card(hid("rhythm kpi " + measure), measure, title, 12 + index * 316, 90, 304, 78, 3000, 3 + index, color),
+                card(
+                    hid("rhythm kpi " + measure),
+                    measure,
+                    title,
+                    12 + index * 316,
+                    90,
+                    304,
+                    78,
+                    3000,
+                    3 + index,
+                    color,
+                ),
             )
         )
     rhythm_visuals += [
         (hid("rhythm date"), slicer(hid("rhythm date"), "Date", "Date", "日期", 12, 176, 240, 64, 4000, 8, "Between")),
         (hid("rhythm hour"), slicer(hid("rhythm hour"), "Hour", "Hour Label", "小时", 264, 176, 200, 64, 4000, 9)),
-        (hid("rhythm district"), slicer(hid("rhythm district"), "bi_detector_hour", "district", "地区", 476, 176, 240, 64, 4000, 10)),
+        (
+            hid("rhythm district"),
+            slicer(
+                hid("rhythm district"),
+                "bi_detector_hour",
+                "district",
+                "地区",
+                476,
+                176,
+                240,
+                64,
+                4000,
+                10,
+            ),
+        ),
         (
             hid("rhythm line"),
             visual(
@@ -1090,7 +1128,10 @@ def build_pages() -> list[tuple[str, str, dict]]:
                         agg_proj("bi_hotspot", "mean_speed_kmh", 1, "速度 km/h"),
                     ],
                 },
-                container=chrome("探测器位置（经度 × 纬度）", "Azure 地图需要登录，所以用散点图。点越大越堵。TDS10012 只有 3 天数据"),
+                container=chrome(
+                    "探测器位置（经度 × 纬度）",
+                    "Azure 地图需要登录，所以用散点图。点越大越堵。TDS10012 只有 3 天数据",
+                ),
             ),
         ),
         (
@@ -1182,7 +1223,10 @@ def build_pages() -> list[tuple[str, str, dict]]:
                     ],
                 },
                 objects={"legend": [{"properties": {"show": lit("true"), "position": lit("'Top'")}}]},
-                container=chrome("走廊速度（km/h，工作日）", "有两个方向的还有 Yuen Long Highway、North Lantau Highway。过海隧道不在这份数据里"),
+                container=chrome(
+                    "走廊速度（km/h，工作日）",
+                    "有两个方向的还有 Yuen Long Highway、North Lantau Highway。过海隧道不在这份数据里",
+                ),
                 filters=tidal_filter,
             ),
         ),
@@ -1285,7 +1329,18 @@ def build_pages() -> list[tuple[str, str, dict]]:
         trust_visuals.append(
             (
                 hid("trust kpi " + measure),
-                card(hid("trust kpi " + measure), measure, title, 12 + index * 422, 50, 406, 78, 3000, 2 + index, color),
+                card(
+                    hid("trust kpi " + measure),
+                    measure,
+                    title,
+                    12 + index * 422,
+                    50,
+                    406,
+                    78,
+                    3000,
+                    2 + index,
+                    color,
+                ),
             )
         )
     trust_visuals += [
